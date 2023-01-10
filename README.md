@@ -1,6 +1,4 @@
-# WoFaBackend
 
-TODO Beschreiben
 
 # Getting started
 
