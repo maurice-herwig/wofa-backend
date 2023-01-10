@@ -94,9 +94,3 @@ curl -L -X POST 'http://127.0.0.1:8080/o/token/' \
 
 After that you receive an access token as response with this you have access to all endpoints of this backend.
 
-
-
-- TODO: beispiel für einen Endpunkt zeigen.
-
-# TODOs
-- Auch die Eingabe von regulären Ausdrücken ermöglichen
