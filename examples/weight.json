@@ -1,0 +1,32 @@
+{
+  "automaton": {
+    "start_states": [
+      "1"
+    ],
+    "transitions": [
+      {
+        "start": "1",
+        "letter": "a",
+        "end": "1"
+      },
+      {
+        "start": "1",
+        "letter": "b",
+        "end": "1"
+      },
+      {
+        "start": "1",
+        "letter": "a",
+        "end": "2"
+      },
+      {
+        "start": "1",
+        "letter": "b",
+        "end": "2"
+      }
+    ],
+    "acc_states": [
+      "2"
+    ]
+  }
+}

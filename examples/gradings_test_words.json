@@ -1,0 +1,26 @@
+{
+"test_object": {
+    "start_states": [
+      "1",
+      "2"
+    ],
+    "transitions": [
+      {
+        "start": "1",
+        "letter": "a",
+        "end": "2"
+      },
+      {
+        "start": "2",
+        "letter": "b",
+        "end": "1"
+      }
+    ],
+    "acc_states": [
+      "2"
+    ]
+  },
+  "max_points" : "10",
+  "containing_words": ["a", "aa", "abba", "aaaa", "aab"],
+  "not_included_words": ["b", "bbb", "bba", "ba", "baa"]
+}
