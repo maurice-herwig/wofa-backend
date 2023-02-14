@@ -1,5 +1,5 @@
 {
-"test_object": {
+"automaton": {
     "start_states": [
       "1",
       "2"

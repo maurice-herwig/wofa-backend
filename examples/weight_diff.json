@@ -1,5 +1,5 @@
 {
-  "solution": {
+  "automaton_1": {
     "type": "json",
     "start_states": [
       "1",
@@ -21,7 +21,7 @@
       "2"
     ]
   },
-  "test_object": {
+  "automaton_2": {
     "start_states": [
       "1",
       "2"

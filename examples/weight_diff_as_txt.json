@@ -1,9 +1,9 @@
 {
-  "solution": {
+  "automaton_1": {
     "type": "txt",
     "value": "input_alphabet = a, b \n\n start_states = 0 \n\n transitions = 0,a -> 1 \n 0,b -> 0 \n 1,a -> 1 \n 1,b -> 2 \n 2,a -> 1 \n 2,b -> 3 \n 3,b -> 0 \n\n\n acc_states = 0,1,2,3 \n"
   },
-  "test_object": {
+  "automaton_2": {
     "type": "txt",
     "value": "input_alphabet = a, b \n\n start_states = 0 \n\n transitions = 0,a -> 1 \n 0,b -> 0 \n 1,a -> 1 \n 1,b -> 2 \n 2,a -> 1 \n 2,b -> 3 \n 3,b -> 0 \n\n\n acc_states = 0,1 \n"
   }

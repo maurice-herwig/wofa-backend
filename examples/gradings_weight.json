@@ -1,5 +1,5 @@
 {
-  "solution": {
+  "automaton_1": {
     "start_states": [
       "1",
       "2"
@@ -20,7 +20,7 @@
       "2"
     ]
   },
-  "test_object": {
+  "automaton_2": {
     "start_states": [
       "1",
       "2"
