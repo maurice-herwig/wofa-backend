@@ -1,0 +1,1141 @@
+\subsection{POST fa/ create/}
+On this endpoint we can crate a new finite automaton. For the creation, we can choose from four types of automatons. The one\_symbol NFA is an automaton, that accepts only the word of length one for a given letter. The univ\_symbol automaton accepts all words of length one for the given alphabet. The empty type, create the empty automaton, and the full type the full automaton. For all types we need we the alphabet of the new automaton \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item type: one\_symbol $|$ univ\_symbol $|$ empty $|$ full
+    \item alphabet: list of strings
+    \item letter: char (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/create/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"type"}: "one\_symbol",
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+        \textcolor{red}{"alphabet"}: ["a", "b"],\\
+        \textcolor{red}{"letter"}: "a"\}
+     \end{adjustwidth}
+     
+\ \\
+\textbf{Response:}\\
+\ \\
+ \{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+
+
+
+
+\subsection{POST fa/ check/}
+With the finite automaton check endpoint we can check if the automaton accept a special word. For this we need to choose the method word and fill the word parameter with the word, that we want to check. additionally can we check with empty\_word method if the automaton accept the empty word or with the is\_empty method, whether the automaton accept the empty language.\\
+\ \\
+\textbf{Header:}m
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+    \item method: word $|$ is\_empty $|$ empty\_word
+    \item word: String (required by the word method.)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/check/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"],\\
+    \textcolor{red}{"type"}: "word"\\
+    \textcolor{red}{"word"}: "ab" \}
+    \end{adjustwidth}
+     
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+\begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result"}: false
+\end{adjustwidth}
+\}
+
+
+
+\subsection{POST fa/ longest\_run/}
+At this endpoint we can compute the number of states that can we visited by one run, without that we visit one state twice.\\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\ \\
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/longest\_run/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+\begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result"}: 2
+\end{adjustwidth}
+\}
+
+
+
+
+
+\subsection{POST fa/ reachable/}
+At the finite automaton reachable endpoint, can we for a given automaton compute all from the start states reachable states. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/reachable/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}, \\
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \},
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+\begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result"}: [0, 1, 2]
+\end{adjustwidth}
+\}
+
+
+
+\subsection{POST fa/ productive/}
+Here can we compute for the given alphabet, the set of states so that exists a path from the state to a accepting state. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/productive/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}, \\
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \},
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+\begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result"}: [0, 1]
+\end{adjustwidth}
+\}
+
+
+
+
+
+
+
+
+
+\subsection{POST fa/ sim\_pairs/}
+This endpoint compute all pairs (q, p) of states so that q is simulated by p. That means for every transition from q exists a transition from p to the same state or a simulated equivalence state and q is not a final state or p is a final state too.  \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/sim\_pairs/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [0]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+\begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result"}: [ [0, 1] ]
+\end{adjustwidth}
+\}
+
+
+
+\subsection{POST fa/ minimize/}
+To minimize a automaton we can use this endpoint. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/minimize/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}, \\
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 1,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \},
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [0, 1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 0
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [0]
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+
+
+
+\subsection{POST fa/ star/}
+The star endpoint, Surround the set of words in the language with the star operation. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/star/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 0
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [0]
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+
+
+\subsection{POST fa/ determine/}
+With the determine endpoint we can compute from a nondeterministic finite automaton the equivalent deterministic finite automaton.\\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\ \\
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/determine/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}, \\
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \},
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1, 2]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+ \{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+
+\subsection{POST fa/ complement/}
+The complement endpoint compute the complement of the given finite automaton. The result is an automaton that accept only the words the the given one reject.  \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/complement/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+ \{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \},\\
+            \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \},\\
+            \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 1,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \},\\
+            \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 1,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \},\\
+            \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 2,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \},\\
+            \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 2,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [0, 2]
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+\subsection{POST fa/ union/}
+With the union endpoint, can we compute the automaton that accept the words, that are accepted by at least one of the two given automatons. If the alphabet is not explicitly specified, the union of the used transition letters of the two automates is used here. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\ \\
+\begin{itemize}
+    \item automaton\_1: Automaton
+     \item automaton\_2: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/union/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton\_1"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+
+   \textcolor{red}{"automaton\_2"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \} \}
+    \end{adjustwidth}
+\end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+ \{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \},\\
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+
+\subsection{POST fa/ concatenate/}
+The concatenation endpoint, concatenates the two given automaton to one automaton. That means that every word of the resulting automaton can divided into two subwords, so that subword one is accepted by automaton\_1 and subword two is accepted by automaton\_2. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\ \\
+\begin{itemize}
+    \item automaton\_1: Automaton
+     \item automaton\_2: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/concatenate/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton\_1"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+
+   \textcolor{red}{"automaton\_2"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \} \}
+    \end{adjustwidth}
+\end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+ \{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \},\{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 1,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 2
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [2]
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+\subsection{POST fa/ intersect/}
+With this endpoint can we compute the intersection of the languages of the two given automaton. In the language of the resulting automaton are all words that accepted of both input automatons.\\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\ \\
+\begin{itemize}
+    \item automaton\_1: Automaton
+     \item automaton\_2: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/intersect/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton\_1"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+
+   \textcolor{red}{"automaton\_2"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \} \}
+    \end{adjustwidth}
+\end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+ \{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [],\\
+            \textcolor{red}{"transitions"}: [],\\
+        \textcolor{red}{"acc\_states" }: []
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+\subsection{POST fa/ sym\_diff/}
+This operation computes the symmetrically difference of the two given automatons and return the resulting automaton. The symmetrically difference contains all words that are exactly in one of the two given automatons.  \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\ \\
+\begin{itemize}
+    \item automaton\_1: Automaton
+     \item automaton\_2: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/sym\_diff/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton\_1"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \},\\
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+
+   \textcolor{red}{"automaton\_2"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \} \}
+    \end{adjustwidth}
+\end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+ \{
+ \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result\_automaton"}: \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]
+    \end{adjustwidth}
+    \}
+\end{adjustwidth}
+\}
+
+
+\subsection{POST fa/ equivalent/}
+With the equivalent endpoint can we check if the languages of the two given automatons are equivalent. If the languages are not equivalent, the server return an example word, that are accepted by only one of the automatons. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton\_1: Automaton
+     \item automaton\_2: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/equivalent/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton\_1"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \},\\
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+
+   \textcolor{red}{"automaton\_2"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \} \}
+    \end{adjustwidth}
+\end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+\begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result"}: false\\
+    \textcolor{red}{"false\_word"}: "a"\\
+\end{adjustwidth}
+\}
+
+
+\subsection{POST fa/ inclusion/}
+At this endpoint, can we compute if the language of the automaton\_1 a subset of the language of the automaton\_2. If this not the case, the server returns additionally a word that are accepted by automaton\_1 but not accepted by automaton\_2. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\ \\
+\textbf{Body:}
+\begin{itemize}
+    \item automaton\_1: Automaton
+     \item automaton\_2: Automaton
+    \item alphabet: list of strings (optional)
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL fa/inclusion/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton\_1"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \},\\
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+
+   \textcolor{red}{"automaton\_2"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "b",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \} \}
+    \end{adjustwidth}
+\end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+\begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"result"}: false\\
+    \textcolor{red}{"false\_word"}: "a"\\
+\end{adjustwidth}
+\}

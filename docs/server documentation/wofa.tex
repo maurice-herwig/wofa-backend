@@ -1,0 +1,338 @@
+The wofa part of this backend provides endpoints to use the Weight of finite automata (WoFA) python package, to use the functions of the package as a backend service. For more informations about the WoFA project visit the GitHub page\footnote{\url{https://github.com/maurice-herwig/wofa.git}} or read the paper with the theoretical background\footnote{\url{https://link.springer.com/chapter/10.1007/978-3-031-07469-1_6}}.
+\subsection{POST wofa/ weight/}
+At this endpoint we use the weight function of the WoFA project to compute the weight of one finite automaton over a given alphabet. Is the alphabet not explicit given, we use as alphabet the set of all used transition letter. Furthermore, can we give optional the settings of the parameters $\eta$ and $\lambda$, in the default case the backend calculates avoidable good parameter values for the given automaton. At least we can set variant in this the words in the constant part up to $\eta$ are weighted, 'words' set all words to the same weight and 'wordLengths' set all word length to the same weight. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\begin{itemize}
+     \item automaton: Automaton
+    \item alphabet: list of strings (optional)
+    \item eta: int (optional, greater or equal 0)
+    \item lambda: float (optional, in range 0 to 1)
+    \item variant: words $|$ wordLengths
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL wofa/weight/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+     \textcolor{red}{"automaton"}: \{
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start\_states"}: [0],\\
+            \textcolor{red}{"transitions"}: [
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \{
+               \begin{adjustwidth}{7.5 mm}{0 cm}
+                    \textcolor{red}{"start"}: 0,\\
+                    \textcolor{red}{"letter"}: "a",\\
+                    \textcolor{red}{"end"}: 1
+               \end{adjustwidth}
+            \}
+            \end{adjustwidth}
+            ],\\
+        \textcolor{red}{"acc\_states" }: [1]  \}
+    \end{adjustwidth}
+    \end{adjustwidth}
+   \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"alphabet"}: ["a", "b"] \}
+    \end{adjustwidth}
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+\begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"weight"}: 0.04020998246719665
+\end{adjustwidth}
+\}
+
+
+\subsection{POST wofa/ weight\_dif/}
+\\
+At the endpoint weight\_diff we can compute the difference between the languages of the two given automatons. To do this, the backend calculates the weight of the symmetric difference between the two languages. Furthermore, we can add parameters for the calculation of the weight as in the previous endpoint. \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\begin{itemize}
+    \item automaton\_1: Automaton
+    \item automaton\_2: Automaton
+    \item eta: int (optional, greater or equal 0)
+    \item lambda: float (optional, in range 0 to 1)
+    \item variant: words $|$ wordLengths
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL wofa/weight\_dif/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+\textcolor{red}{"automaton\_1"}: \{ 
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+        \textcolor{red}{"start\_states"}: ["1","2"], \\
+        \textcolor{red}{"transitions"}: [
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+          \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start"}: "1", \\
+            \textcolor{red}{"letter"}: "a", \\
+            \textcolor{red}{"end"}: "2" 
+            \end{adjustwidth}
+          \},\{ 
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start"}: "2",\\
+            \textcolor{red}{"letter"}: "b", \\
+            \textcolor{red}{"end"}: "1"
+            \end{adjustwidth}
+          \}
+        \end{adjustwidth}
+        ],\\
+        \textcolor{red}{"acc\_states"}: ["2"]
+        \},
+    \end{adjustwidth}
+  \textcolor{red}{"automaton\_2"}: \{
+  \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"start\_states"}: ["1","2"], \\
+    \textcolor{red}{"transitions"}: [
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+      \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+        \textcolor{red}{"start"}: "1",\\
+        \textcolor{red}{"letter"}: "a",\\
+        \textcolor{red}{"end"}: "2"
+        \end{adjustwidth}
+      \}\\
+      \end{adjustwidth}
+    ],\\
+    \textcolor{red}{"acc\_states"}: []
+    \end{adjustwidth}
+  \}
+  \end{adjustwidth}
+     \} \\
+\ \\
+\textbf{Response:}\\
+\ \\
+\{  
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"weight"}: 0.16932351979419896, \\
+    \textcolor{red}{"weight\_only\_solution"}: 0.16932351979419896,\\
+    \textcolor{red}{"weight\_only\_test\_object"}: 0
+    \end{adjustwidth}
+\}
+
+\subsection{POST wofa/ grading/ weight/}
+We use the weight of the symmetric difference to calculate a score. So this endpoint gives us a score proposal for a student submission (automaton\_2) compared to a solution (automaton\_1). The parameter may\_points defines the maximum number of points normally given to graduate equivalent submissions to the solution with this point proposal. With the linear\_displacement parameter, we provide a parameter to set the rigour of the assessment, taking into account the level of difficulty or experience of the students.\\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\begin{itemize}
+    \item automaton\_1: Automaton
+    \item automaton\_2: Automaton
+    \item eta: int (optional, greater or equal 0)
+    \item lambda: float (optional, in range 0 to 1)
+    \item variant: words $|$ wordLengths
+    \item max\_points: number
+    \item linear\_displacement: number
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL wofa/grading/weight/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+\textcolor{red}{"automaton\_1"}: \{ 
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+        \textcolor{red}{"start\_states"}: ["1","2"], \\
+        \textcolor{red}{"transitions"}: [
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+          \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start"}: "1", \\
+            \textcolor{red}{"letter"}: "a", \\
+            \textcolor{red}{"end"}: "2" 
+            \end{adjustwidth}
+          \},\{ 
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start"}: "2",\\
+            \textcolor{red}{"letter"}: "b", \\
+            \textcolor{red}{"end"}: "1"
+            \end{adjustwidth}
+          \}
+        \end{adjustwidth}
+        ],\\
+        \textcolor{red}{"acc\_states"}: ["2"]
+        \},
+    \end{adjustwidth}
+  \textcolor{red}{"automaton\_2"}: \{
+  \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"start\_states"}: ["1","2"], \\
+    \textcolor{red}{"transitions"}: [
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+      \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+        \textcolor{red}{"start"}: "1",\\
+        \textcolor{red}{"letter"}: "a",\\
+        \textcolor{red}{"end"}: "2"
+        \end{adjustwidth}
+      \}\\
+      \end{adjustwidth}
+    ],\\
+    \textcolor{red}{"acc\_states"}: []
+    \end{adjustwidth}
+  \}
+  \textcolor{red}{max\_points}: 10 \\
+  \textcolor{red}{linear\_displacement}: 5
+  \end{adjustwidth}
+     \} \\
+     \ \\
+\textbf{Response:}\\
+\ \\
+\{
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"points"}: 0
+    \end{adjustwidth}
+\}
+
+\subsection{POST wofa/ grading/ subsets/}
+A very simple way to calculate a score proposal for student submissions is to determine the subset relationship of the student submission language and the solution language. Here we get half the points for each correct subset relationship.  \\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\begin{itemize}
+     \item automaton\_1: Automaton
+    \item automaton\_2: Automaton
+    \item max\_points: number
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL wofa/grading/subsets/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+\textcolor{red}{"automaton\_1"}: \{ 
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+        \textcolor{red}{"start\_states"}: ["1","2"], \\
+        \textcolor{red}{"transitions"}: [
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+          \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start"}: "1", \\
+            \textcolor{red}{"letter"}: "a", \\
+            \textcolor{red}{"end"}: "2" 
+            \end{adjustwidth}
+          \},\{ 
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start"}: "2",\\
+            \textcolor{red}{"letter"}: "b", \\
+            \textcolor{red}{"end"}: "1"
+            \end{adjustwidth}
+          \}
+        \end{adjustwidth}
+        ],\\
+        \textcolor{red}{"acc\_states"}: ["2"]
+        \},
+    \end{adjustwidth}
+  \textcolor{red}{"automaton\_2"}: \{
+  \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"start\_states"}: ["1","2"], \\
+    \textcolor{red}{"transitions"}: [
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+      \{
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+        \textcolor{red}{"start"}: "1",\\
+        \textcolor{red}{"letter"}: "a",\\
+        \textcolor{red}{"end"}: "2"
+        \end{adjustwidth}
+      \}\\
+      \end{adjustwidth}
+    ],\\
+    \textcolor{red}{"acc\_states"}: []
+    \end{adjustwidth}
+  \}
+  \textcolor{red}{max\_points}: 10 
+  \end{adjustwidth}
+     \} \\
+     \ \\
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"points"}: 5.0
+    \end{adjustwidth}
+\}
+
+\subsection{POST wofa/ grading/ test\_words/}
+This endpoint needs a list of words that are not in the language of the required language and a list of words that contains in the required language. For each word, the endpoint checks whether the word has been correctly classified by the given automaton. The score is the proportion of correctly classified words multiplied by the maximum score.\\
+\ \\
+\textbf{Header:}
+\begin{itemize}
+    \item Authorization: $\langle$token\_type$\rangle$ $\langle$access\_token$\rangle$
+\end{itemize}
+\textbf{Body:}
+\begin{itemize}
+     \item automaton\_1: Automaton
+    \item automaton\_2: Automaton
+    \item max\_points: number
+    \item containing\_words: list of strings
+    \item not\_included\_words: list of strings
+\end{itemize}
+\ \\
+\textbf{Example:} \\
+\ \\
+\textcolor{blue}{curl -X POST '\BaseURL wofa/grading/test\_words/'\\
+-H} \textcolor{red}{Authorization}: \Auth \\
+\textcolor{blue}{-d} \{ 
+\textcolor{red}{"automaton"}: \{ 
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+     \begin{adjustwidth}{7.5 mm}{0 cm}
+        \textcolor{red}{"start\_states"}: ["1","2"], \\
+        \textcolor{red}{"transitions"}: [
+        \begin{adjustwidth}{7.5 mm}{0 cm}
+          \{
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start"}: "1", \\
+            \textcolor{red}{"letter"}: "a", \\
+            \textcolor{red}{"end"}: "2" 
+            \end{adjustwidth}
+          \},\{ 
+            \begin{adjustwidth}{7.5 mm}{0 cm}
+            \textcolor{red}{"start"}: "2",\\
+            \textcolor{red}{"letter"}: "b", \\
+            \textcolor{red}{"end"}: "1"
+            \end{adjustwidth}
+          \}
+        \end{adjustwidth}
+        ],\\
+        \textcolor{red}{"acc\_states"}: ["2"]
+    \end{adjustwidth}
+    \},\\
+  \textcolor{red}{max\_points}: 10 \\
+  \textcolor{red}{"containing\_words"}: ["a", "aa", "abba", "aaaa", "aab"],\\
+  \textcolor{red}{"not\_included\_words"}: ["b", "bbb", "bba", "ba", "baa"]
+  \end{adjustwidth}
+     \} \\
+     \ \\
+\ \\
+\textbf{Response:}\\
+\ \\
+\{
+    \begin{adjustwidth}{7.5 mm}{0 cm}
+    \textcolor{red}{"points"}: 5.0
+    \end{adjustwidth}
+\}

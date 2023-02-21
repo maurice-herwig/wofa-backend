@@ -1,0 +1,37 @@
+\documentclass[oneside, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{changepage}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{mathtools}
+
+\input{macros.tex}
+
+
+\title{WoFA Backend Documentation}
+\author{Maurice Herwig}
+\date{December 2022}
+\input{macros.tex}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\input{intro.tex}
+\newpage
+
+\section{WoFA}
+\input{wofa.tex}
+\newpage
+
+\section{FiniteAutomata}
+\input{fa.tex}
+\newpage
+
+\bibliography{literature}
+
+\end{document}
